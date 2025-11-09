@@ -54,7 +54,8 @@ export class ButtonConnect implements AfterViewInit {
 
   private peerConnection!: RTCPeerConnection;
   private signalingSocket!: WebSocket;
-  private signalServerUrl = 'wss://my-esp32-signal.onrender.com';
+  private signalServerUrl = 'wss://webrtc-handshakeserver.onrender.com';
+  // wake up server by visiting: https://webrtc-handshakeserver.onrender.com/
 
   // The WebApp starts the connection, the ESP32 will answer.
   ngAfterViewInit() {}
