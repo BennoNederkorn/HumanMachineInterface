@@ -8,6 +8,11 @@ import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 })
 export class ButtonConnect implements AfterViewInit {
 
+// ICE: Interactive Connectivity Establishment​
+// NAT: Network Address Translator​
+// STUN: Session Traversal Utilities for NAT​
+// SDP: Session Description Protocol
+
   // The WebApp needs to find out its own public IP address (TODO because the users is connected to a local network which is behind a NAT) 
   //    - Send a request to a public STUN server.
   //    - A STUN (Session Traversal Utilities for NAT) server will tell the WebApp what its public IP address and port are.
@@ -95,6 +100,16 @@ export class ButtonConnect implements AfterViewInit {
       if (this.videoElement.nativeElement.srcObject !== event.streams[0]) {
         this.videoElement.nativeElement.srcObject = event.streams[0];
       }
+    };
+
+    this.peerConnection.ondatachannel = (event) => {
+      console.log('Data Channel received:', event.channel.label);
+      const receiveChannel = event.channel;
+      
+      receiveChannel.onmessage = (msgEvent) => {
+        console.log('Received Data from ESP32', msgEvent.data);
+        // TODO convert the Blob/ArrayBuffer to a valid Image source
+      };
     };
   }
 
