@@ -62,6 +62,12 @@ export class ButtonConnect implements AfterViewInit {
   private signalServerUrl = 'wss://webrtc-handshakeserver.onrender.com';
   // wake up server by visiting: https://webrtc-handshakeserver.onrender.com/
 
+  // Properties for handling the JPEG-over-datachannel video stream
+  private videoStreamCanvas?: HTMLCanvasElement; //  A hidden <canvas> element onto which each received image is drawn.
+  private videoStreamCanvasCtx?: CanvasRenderingContext2D | null; // The 2D rendering context of the canvas, used for drawing.
+  private imageElement = new Image(); // used to load the JPEG data. 
+  private lastObjectUrl?: string; // URL string of the previously created image blob. Needed to release the image memory.
+
   // The WebApp starts the connection, the ESP32 will answer.
   ngAfterViewInit() {}
 
@@ -95,8 +101,9 @@ export class ButtonConnect implements AfterViewInit {
     };
 
     // This event fires when the remote video stream arrives
+    // --> So never because thew ESP is returning raw JPEG bytes
     this.peerConnection.ontrack = (event) => {
-      console.log('Received remote video track!');
+      console.log('Received remote video stream!');
       if (this.videoElement.nativeElement.srcObject !== event.streams[0]) {
         this.videoElement.nativeElement.srcObject = event.streams[0];
       }
@@ -105,12 +112,39 @@ export class ButtonConnect implements AfterViewInit {
     this.peerConnection.ondatachannel = (event) => {
       console.log('Data Channel received:', event.channel.label);
       const receiveChannel = event.channel;
-      
+
+      // Prepare the canvas and video element to display the stream
+      this.initializeCanvasStream();
+
       receiveChannel.onmessage = (msgEvent) => {
-        console.log('Received Data from ESP32', msgEvent.data);
-        // TODO convert the Blob/ArrayBuffer to a valid Image source
+        // msgEvent.data is a Blob or ArrayBuffer containing the JPEG data
+        const blob = new Blob([msgEvent.data], { type: 'image/jpeg' });
+        this.lastObjectUrl = URL.createObjectURL(blob);
+        this.imageElement.src = this.lastObjectUrl;
       };
     };
+  }
+
+  private initializeCanvasStream() {
+    // Create a canvas element to render the images on
+    this.videoStreamCanvas = document.createElement('canvas');
+    this.videoStreamCanvas.width = 640; // TODO
+    this.videoStreamCanvas.height = 480;
+    this.videoStreamCanvasCtx = this.videoStreamCanvas.getContext('2d');
+
+    // When the image loads, draw it to the canvas and clean up the object URL
+    this.imageElement.onload = () => {
+      this.videoStreamCanvasCtx?.drawImage(this.imageElement, 0, 0);
+      if (this.lastObjectUrl) {
+        URL.revokeObjectURL(this.lastObjectUrl);
+      }
+    };
+
+    // Create a MediaStream from the canvas
+    const mediaStream = this.videoStreamCanvas.captureStream(15); // 15 fps
+
+    // Set the stream as the source for the video element
+    this.videoElement.nativeElement.srcObject = mediaStream;
   }
 
   // 3.a Send offer to signalling server
