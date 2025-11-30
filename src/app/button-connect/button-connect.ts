@@ -73,22 +73,22 @@ export class ButtonConnect implements AfterViewInit {
 
 
   onClick() {
-    console.log('Creating PeerConnection...');
+    // 1. Clean up any existing connections before starting a new one.
+    this.cleanupPreviousConnection();
 
+    console.log('Creating PeerConnection...');  
     
-    
-    
-      // 3.b Create the PeerConnection
-      this.peerConnection = new RTCPeerConnection(this.iceConfig);
+    // 3.b Create the PeerConnection
+    this.peerConnection = new RTCPeerConnection(this.iceConfig);
 
-      // Set up event handlers for the PeerConnection
-      this.setupPeerConnectionHandlers();
+    // Set up event handlers for the PeerConnection
+    this.setupPeerConnectionHandlers();
 
-      // Connect to the Signaling Server
-      this.connectToSignalingServer(); 
+    // Connect to the Signaling Server
+    this.connectToSignalingServer(); 
     
     
-    };
+  };
     
   private setupPeerConnectionHandlers() {
     // 4.b for each candidate found the onicecandidate event fires
@@ -147,9 +147,36 @@ export class ButtonConnect implements AfterViewInit {
     this.videoElement.nativeElement.srcObject = mediaStream;
   }
 
+  private cleanupPreviousConnection() {
+    console.log('Cleaning up previous connection...');
+
+    // Close the data channel and peer connection
+    if (this.peerConnection) {
+      this.peerConnection.close();
+    }
+
+    // Close the signaling socket
+    if (this.signalingSocket) {
+      this.signalingSocket.close();
+    }
+
+    // Clean up canvas and image resources
+    if (this.lastObjectUrl) {
+      URL.revokeObjectURL(this.lastObjectUrl);
+      this.lastObjectUrl = undefined;
+    }
+    if (this.videoStreamCanvasCtx) {
+      this.videoStreamCanvasCtx.clearRect(0, 0, this.videoStreamCanvas!.width, this.videoStreamCanvas!.height);
+    }
+    this.videoElement.nativeElement.srcObject = null;
+  }
+
   // 3.a Send offer to signalling server
   private connectToSignalingServer() {
     this.signalingSocket = new WebSocket(this.signalServerUrl);
+    
+    // Ensure that incoming data on the signaling channel is treated as text
+    this.signalingSocket.binaryType = 'string';
 
     // Fired when the WebSocket connection is open
     this.signalingSocket.onopen = () => {
