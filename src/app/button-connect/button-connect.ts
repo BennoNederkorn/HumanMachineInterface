@@ -175,9 +175,6 @@ export class ButtonConnect implements AfterViewInit {
   private connectToSignalingServer() {
     this.signalingSocket = new WebSocket(this.signalServerUrl);
     
-    // Ensure that incoming data on the signaling channel is treated as text
-    this.signalingSocket.binaryType = 'string';
-
     // Fired when the WebSocket connection is open
     this.signalingSocket.onopen = () => {
       console.log('Signaling WebSocket connected. Creating offer...');
