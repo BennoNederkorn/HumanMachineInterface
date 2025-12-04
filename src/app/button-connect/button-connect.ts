@@ -97,6 +97,10 @@ export class ButtonConnect implements AfterViewInit {
         console.log('Sending ICE candidate:', event.candidate);
         // 5.b WebApp sends each candidate to the signalling server
         this.signalingSocket.send(JSON.stringify({ 'candidate': event.candidate }));
+      } else {
+        // End of candidates
+        console.log('End of ICE candidates.');
+        this.signalingSocket.send(JSON.stringify({ 'candidate': null }));
       }
     };
 
