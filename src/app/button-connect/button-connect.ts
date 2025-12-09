@@ -59,7 +59,8 @@ export class ButtonConnect implements AfterViewInit {
 
   private peerConnection!: RTCPeerConnection;
   private signalingSocket!: WebSocket;
-  private signalServerUrl = 'wss://webrtc-handshakeserver.onrender.com';
+  private signalServerUrl = 'http://91.5.180.129:3000';
+  // private signalServerUrl = 'wss://webrtc-handshakeserver.onrender.com';
   // wake up server by visiting: https://webrtc-handshakeserver.onrender.com/
 
   // Properties for handling the JPEG-over-datachannel video stream
