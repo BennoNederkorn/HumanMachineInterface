@@ -148,7 +148,11 @@ export class ButtonConnect implements AfterViewInit {
 
     // Fired when we receive a message from the signaling server
     this.signalingSocket.onmessage = async (event) => {
-      const message = JSON.parse(event.data);
+      let textData = event.data;
+      if (event.data instanceof Blob) {
+        textData = await event.data.text();
+      }
+      const message = JSON.parse(textData);
       console.log('Signaling message received:', event.data);
 
       if (message.sdp) {
