@@ -189,7 +189,7 @@ export class ButtonConnect implements AfterViewInit {
 
     // Send the "offer" to the ESP32 via the signaling server
     console.log('Sending OFFER to ESP32...', offer.sdp);
-    this.signalingSocket.send(JSON.stringify({ 'sdp': offer }));
+    this.signalingSocket.send(JSON.stringify(offer));
   }
 
 }
