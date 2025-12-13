@@ -59,7 +59,8 @@ export class ButtonConnect implements AfterViewInit {
 
   private peerConnection!: RTCPeerConnection;
   private signalingSocket!: WebSocket;
-  private signalServerUrl = 'wss://91.5.180.129:3000';
+  // private signalServerUrl = 'wss://91.5.180.129:3000'; // Home
+  private signalServerUrl = 'wss://[2a02:8070:2486:67a0::181d]:3000'; // Lubu
   // The ESP32 joins a room based on its MAC address. Check the ESP32 logs for the exact room ID.
   private roomId = 'esp_8c4610';
  
