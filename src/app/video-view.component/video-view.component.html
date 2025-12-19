@@ -1,0 +1,5 @@
+<div class="video-container">
+    <button (click)="startStream()">Start Video Stream</button>
+    <br />
+    <img *ngIf="imgSrc" [src]="imgSrc" alt="WebRTC Stream" style="max-width: 100%; margin-top: 10px;" />
+</div>
