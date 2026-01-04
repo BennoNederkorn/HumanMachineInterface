@@ -14,7 +14,7 @@ export class WebRtcService {
   private socket$: WebSocketSubject<SignalingMessage>;
   private peerConnection?: RTCPeerConnection;
   private dataChannel?: RTCDataChannel;
-  private signalServerUrl = 'wss://91.5.180.129:3000'; 
+  private signalServerUrl = 'wss://80.134.192.148:3000'; 
 
   // Observable for video data chunks
   public videoFrame$ = new Subject<ArrayBuffer>();
