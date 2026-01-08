@@ -1,0 +1,14 @@
+:host {
+    display: block;
+    width: 150px;
+    height: 150px;
+}
+
+#joystick-zone {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* Essential for nipplejs to position itself */
+    background: rgba(0, 0, 0, 0);
+    /* Optional: visual debugging */
+}

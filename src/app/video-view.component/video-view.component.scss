@@ -1,0 +1,51 @@
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    overflow: hidden;
+
+    .video-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* Fallback background image when video is not present */
+        background-image: url('./bb8-sphero2.jpg');
+        background-size: cover;
+        background-position: center;
+        z-index: 1;
+
+        .stream-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .ui-layer {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 10;
+    }
+
+    .joystick-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        pointer-events: none;
+        /* Allows clicks to pass through empty spaces */
+
+        /* Re-enable pointer events for the actual interactive elements inside joystick-container */
+        ::ng-deep * {
+            pointer-events: auto;
+        }
+    }
+}

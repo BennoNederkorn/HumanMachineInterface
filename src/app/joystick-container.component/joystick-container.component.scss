@@ -1,0 +1,37 @@
+.container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    /* Pushes items to far left and right */
+    align-items: flex-end;
+    /* Aligns items to the bottom */
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0px;
+
+    .ai-controls {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .ai-button {
+            background-color: transparent;
+            color: #333;
+            border: 2px solid #333;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 120px;
+            text-align: center;
+
+            &.active {
+                background-color: green;
+                color: white;
+                border-color: green;
+            }
+        }
+    }
+}

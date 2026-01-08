@@ -70,7 +70,7 @@ This is the user controller for the BB-8.
   npm is the node package manager. It contains and manages many packages and modules.
   It starts, loads and compiles the app.
 - `npm --version`
-- ``
+- `npm install packagename`
   ng is the angular cli and a npm module. It is loaded by npm.
 - `ng build` creates a dist/controllerWebApp folder. That is the folder which needs to be deployed.
 - `ng --version`

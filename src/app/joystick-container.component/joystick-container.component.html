@@ -1,0 +1,8 @@
+<div class="container">
+    <div class="ai-controls">
+        <button class="ai-button" [class.active]="aiEnabled" (click)="onClick()">{{ aiEnabled ? 'AI mode' :
+            'Manual mode' }}</button>
+    </div>
+    <app-joystick [lockX]="true" (move)="onJoystickMove($event, 'head')" (end)="onJoystickEnd('head')"></app-joystick>
+    <app-joystick (move)="onJoystickMove($event, 'body')" (end)="onJoystickEnd('body')"></app-joystick>
+</div>

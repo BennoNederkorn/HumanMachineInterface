@@ -25,7 +25,7 @@ export class ButtonConnect implements OnDestroy {
   
   // NOTE: Browsers block 'ws://' if the page is loaded via 'https://' (Mixed Content).
   // Since the ESP32 is using 'ws://', ensure this app is served via 'http://'.
-  private signalServerUrl = 'ws://91.5.180.129:3000'; 
+  private signalServerUrl = 'ws://80.134.192.148:3000'; 
   
   private lastObjectUrl: string | null = null;
 
