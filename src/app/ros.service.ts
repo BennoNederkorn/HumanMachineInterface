@@ -9,7 +9,7 @@ export class RosService {
 
   constructor() {
     this.ros = new ROSLIB.Ros({
-      url: 'ws://172.17.0.1:9090' // Replace with Jetson's local IP (TODO Tailscale, talk to Lee)
+      url: 'wss://100.93.171.127:9090' // Jetson's "local" Tailscale IP
     });
 
     this.ros.on('connection', () => {
