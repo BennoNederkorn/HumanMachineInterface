@@ -1,18 +1,4 @@
-<!-- <h1>ESP32-S3 WebRTC Stream</h1>
-<button-control button_symbol="Turn Head right" />
-<button-control button_symbol="Turn Head left" />
-<br /> -->
-<!-- <div style="height: 200px;">
-    <app-joystick (move)="onJoystickMove($event)" (end)="onJoystickEnd()"></app-joystick>
-    <app-joystick (move)="onJoystickMove($event)" (end)="onJoystickEnd()"></app-joystick>
-</div> -->
-<!-- <app-joystick-container /> -->
-<!-- <br />
-<button-control button_symbol="There should be a button which starts the WebRTC connection" /> -->
-
-<!-- <button-connect />
-
-<router-outlet />
--->
-
-<app-video-view></app-video-view>
+<div class="dashboard">
+    <app-camera-view signalingUrl="https://raspberrypi.tail88b734.ts.net/offer"> </app-camera-view>
+    <!-- <app-camera-view signalingUrl="https://raspberrypi.tail88b734.ts.net/offer" apiKey="my-secret-password"> </app-camera-view> -->
+</div>

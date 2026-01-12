@@ -1,15 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router'; // needed?
-import { ButtonControl } from './button-control/button-control';
-import { ButtonConnect } from './button-connect/button-connect';
-import { VideoViewComponent } from './video-view.component/video-view.component';
-import { JoystickContainerComponent } from './joystick-container.component/joystick-container.component';
+import { CameraViewComponent } from './camera-view.component/camera-view.component';
 
 // import {WebRtcService} from './web-rtc.service';
 
 @Component({
   selector: 'app-root',
-  imports: [ButtonControl, ButtonConnect, VideoViewComponent, RouterOutlet, JoystickContainerComponent],
+  imports: [CameraViewComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

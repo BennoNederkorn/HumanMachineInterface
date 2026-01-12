@@ -1,0 +1,38 @@
+.camera-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-image: url('./bb8-sphero2.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+
+}
+
+.joystick-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    /* Allows clicks to pass through empty spaces */
+
+    /* Re-enable pointer events for the actual interactive elements inside joystick-container */
+    ::ng-deep * {
+        pointer-events: auto;
+    }
+}
