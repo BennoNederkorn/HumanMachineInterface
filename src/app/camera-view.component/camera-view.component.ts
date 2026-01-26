@@ -19,6 +19,7 @@ export class CameraViewComponent implements OnInit, OnDestroy {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   private pc: RTCPeerConnection | null = null;
+  private whepSessionUrl: string | null = null;
   public status: 'init' | 'connecting' | 'connected' | 'error' | 'offline' = 'init';
   public errorMessage: string = '';
 
@@ -81,16 +82,20 @@ export class CameraViewComponent implements OnInit, OnDestroy {
       // For simple setups, sending immediately usually works.
       await this.waitToGatherIceCandidates();
 
+      // WHEP: POST SDP offer, receive SDP answer
       const response = await fetch(this.signalingUrl, {
         method: 'POST',
-        body: JSON.stringify({
-          sdp: this.pc.localDescription?.sdp,
-          type: this.pc.localDescription?.type
-        }),
+        // body: JSON.stringify({
+        //   sdp: this.pc.localDescription?.sdp,
+        //   type: this.pc.localDescription?.type
+        // }),
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': this.apiKey // Send key if configured
-        }
+          // 'Content-Type': 'application/json',
+          // 'Authorization': this.apiKey // Send key if configured
+          'Content-Type': 'application/sdp',
+          'Accept': 'application/sdp'
+        },
+        body: this.pc.localDescription?.sdp || ''
       });
 
       if (!response.ok) {
@@ -98,20 +103,27 @@ export class CameraViewComponent implements OnInit, OnDestroy {
       }
 
       // 6. Handle Answer from Pi
-      const answer = await response.json();
-      await this.pc.setRemoteDescription(answer);
+      // Save WHEP session URL (Location header) for cleanup
+      this.whepSessionUrl = response.headers.get('Location');
+
+      const answerSdp = await response.text();
+      await this.pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 
     } catch (err: any) {
-      console.error('Stream failed', err);
+
       this.status = 'error';
       this.errorMessage = err.message || 'Could not connect to camera.';
     }
   }
 
-  stopStream() {
+  async stopStream() {
     if (this.pc) {
       this.pc.close();
       this.pc = null;
+    }
+    if (this.whepSessionUrl) {
+      try { await fetch(this.whepSessionUrl, { method: 'DELETE' }); } catch { }
+      this.whepSessionUrl = null;
     }
     this.status = 'init';
   }
