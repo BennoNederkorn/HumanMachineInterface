@@ -10,10 +10,10 @@ import { JoystickContainerComponent } from '../joystick-container.component/joys
   styleUrl: './camera-view.component.scss',
 })
 export class CameraViewComponent implements OnInit, OnDestroy {
-  // CONFIGURATION
-  // Input: The Tailscale Funnel URL (e.g., "https://my-pi.tailnet.ts.net/offer")
+  /** Input: The Tailscale Funnel URL (e.g., "https://my-pi.tailnet.ts.net/offer") */
   @Input() signalingUrl: string = '';
-  // Input: Optional secret key if you added security to Python
+
+  /** Input: Optional secret key if you added security to the backend */
   @Input() apiKey: string = '';
 
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -41,7 +41,7 @@ export class CameraViewComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     try {
-      // 1. Initialize WebRTC
+      // 1. Initialize WebRTC Configuration
       const config: RTCConfiguration = {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
@@ -51,8 +51,7 @@ export class CameraViewComponent implements OnInit, OnDestroy {
       this.pc = new RTCPeerConnection(config);
 
       // 2. Prepare to receive video
-      // We add a transceiver to tell WebRTC we want to receive video, 
-      // even if we aren't sending any.
+      // Add a transceiver to tell WebRTC we want to receive video, even if we aren't sending any.
       this.pc.addTransceiver('video', { direction: 'recvonly' });
 
       // 3. Handle incoming stream
@@ -78,20 +77,14 @@ export class CameraViewComponent implements OnInit, OnDestroy {
       await this.pc.setLocalDescription(offer);
 
       // 5. Send Offer to Raspberry Pi (Signaling via Tailscale Funnel)
-      // We wait for ICE gathering to complete or just send what we have. 
-      // For simple setups, sending immediately usually works.
+      // Wait for ICE gathering to complete to ensure all candidates are included in the offer.
       await this.waitToGatherIceCandidates();
 
       // WHEP: POST SDP offer, receive SDP answer
       const response = await fetch(this.signalingUrl, {
         method: 'POST',
-        // body: JSON.stringify({
-        //   sdp: this.pc.localDescription?.sdp,
-        //   type: this.pc.localDescription?.type
-        // }),
         headers: {
-          // 'Content-Type': 'application/json',
-          // 'Authorization': this.apiKey // Send key if configured
+          // Standard WHEP headers
           'Content-Type': 'application/sdp',
           'Accept': 'application/sdp'
         },
@@ -128,7 +121,7 @@ export class CameraViewComponent implements OnInit, OnDestroy {
     this.status = 'init';
   }
 
-  // Helper: Wait for ICE candidates (optional but improves connection success)
+  /** Helper: Wait for ICE candidates (improves connection success rate) */
   private waitToGatherIceCandidates(): Promise<void> {
     return new Promise((resolve) => {
       if (!this.pc || this.pc.iceGatheringState === 'complete') {

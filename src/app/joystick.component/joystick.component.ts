@@ -8,10 +8,10 @@ import nipplejs from 'nipplejs';
   styleUrl: './joystick.component.scss',
 })
 export class JoystickComponent implements AfterViewInit, OnDestroy {
-  // Access the DOM element
+  /** Access the DOM element where the joystick will be rendered */
   @ViewChild('joystickContainer') joystickContainer!: ElementRef;
 
-  // Output events to parent component
+  /** Output events to parent component */
   @Output() move = new EventEmitter<any>();
   @Output() end = new EventEmitter<void>();
 
@@ -21,7 +21,7 @@ export class JoystickComponent implements AfterViewInit, OnDestroy {
   private manager: nipplejs.JoystickManager | undefined;
 
   ngAfterViewInit() {
-    // nipplejs requires the DOM to be rendered, so we initialize here
+    // Initialize joystick after DOM is ready
     this.initJoystick();
   }
 

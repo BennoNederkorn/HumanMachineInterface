@@ -10,7 +10,7 @@ import { RosService } from '../ros.service';
   styleUrl: './joystick-container.component.scss',
 })
 export class JoystickContainerComponent {
-  // TODO: Import and inject your actual RosService here.
+  // Inject the ROS service to communicate with the robot
   protected rosService = inject(RosService);
   protected aiEnabled = false;
   protected head_direction = 0.0;
@@ -18,7 +18,7 @@ export class JoystickContainerComponent {
   protected body_direction = 0.0;
   protected body_force = 0.0;
 
-
+  /** Publishes the current HMI state to the /hmi_cmds ROS topic. */
   sendHMICommands() {
     const hmiCmds = new ROSLIB.Topic({
       ros: this.rosService.getRosInstance(),
@@ -37,8 +37,12 @@ export class JoystickContainerComponent {
     hmiCmds.publish(hmi_cmds as any);
   }
 
+  /**
+   * Handles joystick movement events.
+   * @param data Nipple.js event data
+   * @param type 'head' or 'body' joystick
+   */
   onJoystickMove(data: any, type: 'head' | 'body') {
-    // data.vector, data.angle, data.force, etc.
     console.log('Direction:', data.angle.degree, '   Force:', data.force);
 
     if (type === 'head') {

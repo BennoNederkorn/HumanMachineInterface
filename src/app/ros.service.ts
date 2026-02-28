@@ -8,6 +8,7 @@ export class RosService {
   private ros: ROSLIB.Ros;
 
   constructor() {
+    // Initialize ROS connection
     this.ros = new ROSLIB.Ros({
       url: 'https://jetdaughter-1.tail640ef6.ts.net/' // Jetson's funneled Tailscale URL to http://127.0.0.1:9090
       // This was generated with: sudo tailscale funnel -bg http://127.0.0.1:9090

@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { RosService } from './ros.service';
 
 describe('RosService', () => {
